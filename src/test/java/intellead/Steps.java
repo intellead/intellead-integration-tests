@@ -11,7 +11,6 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.bson.Document;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.SQLException;
@@ -104,13 +103,7 @@ public class Steps {
     public void I_send_lead_with_id_to_service_api(int leadId, String serviceName, String api) {
         RequestSpecification request = request(serviceName);
         request.header("Content-Type", "application/json");
-        JSONObject lead = new JSONObject();
-        lead.put("id", leadId);
-        JSONArray leads = new JSONArray();
-        leads.put(0, lead);
-        JSONObject body = new JSONObject();
-        body.put("leads", leads);
-        request.body(body.toString());
+        request.body(Leads.getLead(leadId).toString());
         Response response = request.post(api);
         statusCode = response.getStatusCode();
     }
@@ -120,20 +113,36 @@ public class Steps {
         sleep(milliseconds);
     }
 
-    @Then("^Lead with id (\\d+) should be in intellead-data-mongodb database$")
+    @Then("^Lead with id (\\d+) should be in the database")
     public void Lead_with_id_should_be_in_intellead_data_mongodb_database(int leadId) {
         MongoDatabase database = mongoClient.getDatabase("local");
         MongoCollection<Document> collection = database.getCollection("leads");
-        long count = collection.count(parse("{_id : {$eq : " + leadId + "}}"));
+        long count = collection.count(parse("{_id: {$eq: \"" + leadId + "\"}}"));
         assertEquals(1, count);
     }
 
-    @Then("^Delete lead with id (\\d+) in intellead-data-mongodb database$")
+    @Then("^Lead with ([\\w_\\.]+) equals to ([\\w ]+) should be in the database")
+    public void Lead_with_field_should_be_in_intellead_data_mongodb_database(String fieldName, String fieldValue) {
+        MongoDatabase database = mongoClient.getDatabase("local");
+        MongoCollection<Document> collection = database.getCollection("leads");
+        long count = collection.count(parse("{\"" + fieldName + "\": {$eq: \"" + fieldValue + "\"}}"));
+        assertEquals(1, count);
+    }
+
+    @Then("^Lead with id (\\d+) has field ([\\w_\\.]+) in the database$")
+    public void Lead_with_id_has_field_in_the_database(int leadId, String fieldName) {
+        MongoDatabase database = mongoClient.getDatabase("local");
+        MongoCollection<Document> collection = database.getCollection("leads");
+        long count = collection.count(parse("{$and: [{_id: {$eq: \"" + leadId + "\"}}, {\"" + fieldName + "\": {$exists: true}}]}"));
+        assertEquals(1, count);
+    }
+
+    @Then("^Delete lead with id (\\d+) in the database")
     public void Delete_lead_with_id_in_intellead_data_mongodb_database(int leadId) {
         MongoDatabase database = mongoClient.getDatabase("local");
         MongoCollection<Document> collection = database.getCollection("leads");
-        collection.deleteOne(parse("{_id : {$eq : " + leadId + "}}"));
-        long count = collection.count(parse("{_id : {$eq : " + leadId + "}}"));
+        collection.deleteOne(parse("{_id: {$eq: \"" + leadId + "\"}}"));
+        long count = collection.count(parse("{_id: {$eq: \"" + leadId + "\"}}"));
         assertEquals(0, count);
     }
 
