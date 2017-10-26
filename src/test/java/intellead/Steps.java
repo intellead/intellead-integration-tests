@@ -24,13 +24,14 @@ import static java.lang.String.format;
 import static java.lang.Thread.sleep;
 import static java.sql.DriverManager.getConnection;
 import static org.bson.Document.parse;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.junit.Assert.fail;
 
 public class Steps {
 
     protected Map<String, String> serviceMapping;
-    protected MongoClient mongoClient;
+    protected MongoClient mongoClientData;
+    protected MongoClient mongoClientConnector;
     protected Properties postgresOptions;
     private int statusCode;
 
@@ -44,7 +45,8 @@ public class Steps {
         serviceMapping.put("receitaws-data", format("http://%s", getEnv("RECEITAWS_DATA_URL", "localhost:3005")));
         serviceMapping.put("qcnpj-crawler", format("http://%s", getEnv("QCNPJ_CRAWLER_URL", "localhost:3006")));
         serviceMapping.put("intellead-classification", format("http://%s", getEnv("INTELLEAD_CLASSIFICATION_URL", "localhost:3007")));
-        mongoClient = new MongoClient(getEnv("INTELLEAD_DATA_MONGODB_HOST", "localhost"), valueOf(getEnv("INTELLEAD_DATA_MONGODB_PORT", "4001")));
+        mongoClientData = new MongoClient(getEnv("INTELLEAD_DATA_MONGODB_HOST", "localhost"), valueOf(getEnv("INTELLEAD_DATA_MONGODB_PORT", "4001")));
+        mongoClientConnector = new MongoClient(getEnv("INTELLEAD_CONNECTOR_MONGODB_HOST", "localhost"), valueOf(getEnv("INTELLEAD_CONNECTOR_MONGODB_PORT", "4003")));
         forName("org.postgresql.Driver");
         postgresOptions = new Properties();
         postgresOptions.setProperty("user","postgres");
@@ -73,6 +75,13 @@ public class Steps {
     @Given("^intellead-classification-postgresql database is up$")
     public void postgres_is_up() throws SQLException {
         getConnection(format("jdbc:postgresql://%s:%s/postgres", getEnv("INTELLEAD_CLASSIFICATION_POSTGRESQL_HOST", "localhost"), getEnv("INTELLEAD_CLASSIFICATION_POSTGRESQL_PORT", "4002")), postgresOptions);
+    }
+
+    @Given("^intellead-connector-mongodb database is up$")
+    public void mongo_connector_is_up() {
+        RestAssured.baseURI = format("http://%s:%s", getEnv("INTELLEAD_CONNECTOR_MONGODB_HOST", "localhost"), getEnv("INTELLEAD_CONNECTOR_MONGODB_PORT", "4003"));
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.get();
     }
 
     @When("^I send an empty body to ([\\w-]+)(/[\\w-]+)$")
@@ -116,7 +125,7 @@ public class Steps {
 
     @Then("^Lead with id (\\d+) should be in the database")
     public void Lead_with_id_should_be_in_intellead_data_mongodb_database(int leadId) {
-        MongoDatabase database = mongoClient.getDatabase("local");
+        MongoDatabase database = mongoClientData.getDatabase("local");
         MongoCollection<Document> collection = database.getCollection("leads");
         long count = collection.count(parse("{_id: {$eq: \"" + leadId + "\"}}"));
         assertEquals(1, count);
@@ -124,15 +133,15 @@ public class Steps {
 
     @Then("^Lead with ([\\w_\\.]+) equals to ([\\w ]+) should be in the database")
     public void Lead_with_field_should_be_in_intellead_data_mongodb_database(String fieldName, String fieldValue) {
-        MongoDatabase database = mongoClient.getDatabase("local");
+        MongoDatabase database = mongoClientData.getDatabase("local");
         MongoCollection<Document> collection = database.getCollection("leads");
         long count = collection.count(parse("{\"" + fieldName + "\": {$eq: \"" + fieldValue + "\"}}"));
-        assertEquals(1, count);
+        assertTrue(count >= 1);
     }
 
     @Then("^Lead with id (\\d+) has field ([\\w_\\.]+) in the database$")
     public void Lead_with_id_has_field_in_the_database(int leadId, String fieldName) {
-        MongoDatabase database = mongoClient.getDatabase("local");
+        MongoDatabase database = mongoClientData.getDatabase("local");
         MongoCollection<Document> collection = database.getCollection("leads");
         long count = collection.count(parse("{$and: [{_id: {$eq: \"" + leadId + "\"}}, {\"" + fieldName + "\": {$exists: true}}]}"));
         assertEquals(1, count);
@@ -140,9 +149,17 @@ public class Steps {
 
     @Then("^Delete lead with id (\\d+) in the database")
     public void Delete_lead_with_id_in_intellead_data_mongodb_database(int leadId) {
-        MongoDatabase database = mongoClient.getDatabase("local");
+        MongoDatabase database = mongoClientData.getDatabase("local");
         MongoCollection<Document> collection = database.getCollection("leads");
         collection.deleteOne(parse("{_id: {$eq: \"" + leadId + "\"}}"));
+        long count = collection.count(parse("{_id: {$eq: \"" + leadId + "\"}}"));
+        assertEquals(0, count);
+    }
+
+    @Then("^Lead with id (\\d+) should not be in connector database")
+    public void Lead_with_id_should_be_in_intellead_connector_mongodb_database(int leadId) {
+        MongoDatabase database = mongoClientConnector.getDatabase("local");
+        MongoCollection<Document> collection = database.getCollection("leads");
         long count = collection.count(parse("{_id: {$eq: \"" + leadId + "\"}}"));
         assertEquals(0, count);
     }
