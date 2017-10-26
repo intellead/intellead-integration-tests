@@ -1,0 +1,102 @@
+version: '3'
+
+services:
+
+  intellead-connector:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile-intellead-connector
+    ports:
+     - "3001:3000"
+    networks:
+     - web
+     - mongo
+
+  intellead-fitscore:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile-intellead-fitscore
+    ports:
+     - "3002:5000"
+    networks:
+     - web
+
+  intellead-data:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile-intellead-data
+    ports:
+     - "3003:3000"
+    networks:
+     - web
+     - mongo
+
+  intellead-enrich:
+    build:
+      context: ./docker
+      dockerfile: docker/Dockerfile-intellead-enrich
+    ports:
+     - "3004:3000"
+    networks:
+     - web
+
+  receitaws-data:
+    build:
+      context: ./docker
+      dockerfile: docker/Dockerfile-receitaws-data
+    ports:
+     - "3005:3000"
+    networks:
+     - web
+
+  qcnpj-crawler:
+    build:
+      context: ./docker
+      dockerfile: docker/Dockerfile-qcnpj-crawler
+    ports:
+     - "3006:3000"
+    networks:
+     - web
+
+  intellead-classification:
+    build:
+      context: ./docker
+      dockerfile: docker/Dockerfile-intellead-classification
+    ports:
+     - "3007:5000"
+    networks:
+     - web
+     - postgres
+
+  intellead-data-mongodb:
+    build:
+      context: ./docker
+      dockerfile: docker/Dockerfile-intellead-data-mongodb
+    ports:
+     - "4001:27017"
+    networks:
+     - mongo
+
+  intellead-classification-postgresql:
+    build:
+      context: ./docker
+      dockerfile: docker/Dockerfile-intellead-classification-postgresql
+    ports:
+     - "4002:5432"
+    networks:
+     - postgres
+
+  intellead-integration-tests:
+    build: .
+    networks:
+     - web
+     - postgres
+     - mongo
+
+networks:
+  web:
+    driver: bridge
+  postgres:
+    driver: bridge
+  mongo:
+    driver: bridge
