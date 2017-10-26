@@ -1,23 +1,13 @@
 FROM node:8.6.0-alpine
 
-WORKDIR /usr/src/intellead/intellead-data/app
+WORKDIR /usr/src/intellead
 
 RUN apt-get install git && \
     git clone https://github.com/intellead/intellead-data.git
 
-COPY package.json ./
+WORKDIR /usr/src/intellead/intellead-data
 
 RUN npm install --silent --progress=false --production
-
-COPY app.js ./
-
-COPY bin/ ./bin
-
-COPY public/stylesheets/ ./public/stylesheets
-
-COPY src/ ./src
-
-COPY views/ ./views
 
 EXPOSE 3000
 

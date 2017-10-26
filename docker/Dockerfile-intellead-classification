@@ -1,15 +1,13 @@
 FROM python:3.6.2
 
-WORKDIR /usr/src/intellead/intellead-classification/app
+WORKDIR /usr/src/intellead
 
 RUN apt-get install git && \
     git clone https://github.com/intellead/intellead-classification.git
 
-COPY requirements.txt ./
+WORKDIR /usr/src/intellead/intellead-classification
 
 RUN pip install --no-cache-dir -r requirements.txt
-
-COPY app.py normalize.py service.py ./
 
 EXPOSE 5000
 

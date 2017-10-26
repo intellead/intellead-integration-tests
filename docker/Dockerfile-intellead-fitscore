@@ -1,15 +1,13 @@
 FROM python:3.6.2
 
-WORKDIR /usr/src/intellead/intellead-fitscore/app
+WORKDIR /usr/src/intellead
 
 RUN apt-get install git && \
     git clone https://github.com/intellead/intellead-fitscore.git
 
-COPY requirements.txt ./
+WORKDIR /usr/src/intellead/intellead-fitscore
 
 RUN pip install --no-cache-dir -r requirements.txt
-
-COPY app.py service.py ./
 
 EXPOSE 5000
 
