@@ -6,13 +6,6 @@ import org.json.JSONObject;
 public class Leads {
 
     public static JSONObject getLead(int leadId) {
-        switch (leadId) {
-            case 1000: return lead1000();
-            default: return null;
-        }
-    }
-
-    public static JSONObject lead1000() {
         StringBuilder json = new StringBuilder();
         json.append("{");
         json.append("   \"email\": \"jhon@silva.com\",");
@@ -165,7 +158,7 @@ public class Leads {
         json.append("   \"uuid\": \"5a0aa3fe-9fda-461e\",");
         json.append("   \"fit_score\": \"c\",");
         json.append("   \"interest\": 12,");
-        json.append("   \"id\": \"1000\",");
+        json.append("   \"id\": \"").append(leadId).append("\",");
         json.append("   \"cnpj\": \"13.926.863/0001-36\"");
         json.append("}");
         JSONArray leads = new JSONArray();

@@ -6,18 +6,15 @@ services:
     build:
       context: ./docker
       dockerfile: Dockerfile-intellead-connector
-    ports:
-     - "3001:3000"
     networks:
      - web
-     - mongo
+     - mongo_data
+     - mongo_connector
 
   intellead-fitscore:
     build:
       context: ./docker
       dockerfile: Dockerfile-intellead-fitscore
-    ports:
-     - "3002:5000"
     networks:
      - web
 
@@ -25,18 +22,14 @@ services:
     build:
       context: ./docker
       dockerfile: Dockerfile-intellead-data
-    ports:
-     - "3003:3000"
     networks:
      - web
-     - mongo
+     - mongo_data
 
   intellead-enrich:
     build:
       context: ./docker
       dockerfile: Dockerfile-intellead-enrich
-    ports:
-     - "3004:3000"
     networks:
      - web
 
@@ -44,8 +37,6 @@ services:
     build:
       context: ./docker
       dockerfile: Dockerfile-receitaws-data
-    ports:
-     - "3005:3000"
     networks:
      - web
 
@@ -53,8 +44,6 @@ services:
     build:
       context: ./docker
       dockerfile: Dockerfile-qcnpj-crawler
-    ports:
-     - "3006:3000"
     networks:
      - web
 
@@ -62,8 +51,6 @@ services:
     build:
       context: ./docker
       dockerfile: Dockerfile-intellead-classification
-    ports:
-     - "3007:5000"
     networks:
      - web
      - postgres
@@ -72,26 +59,30 @@ services:
     build:
       context: ./docker
       dockerfile: Dockerfile-intellead-data-mongodb
-    ports:
-     - "4001:27017"
     networks:
-     - mongo
+     - mongo_data
 
   intellead-classification-postgresql:
     build:
       context: ./docker
       dockerfile: Dockerfile-intellead-classification-postgresql
-    ports:
-     - "4002:5432"
     networks:
      - postgres
+
+  intellead-connector-mongodb:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile-intellead-connector-mongodb
+    networks:
+     - mongo_connector
 
   intellead-integration-tests:
     build: .
     networks:
      - web
      - postgres
-     - mongo
+     - mongo_data
+     - mongo_connector
     depends_on:
      - intellead-connector
      - intellead-fitscore
@@ -102,6 +93,7 @@ services:
      - intellead-classification
      - intellead-data-mongodb
      - intellead-classification-postgresql
+     - intellead-connector-mongodb
     environment:
      - INTELLEAD_CONNECTOR_URL=intellead-connector:3000
      - INTELLEAD_FITSCORE_URL=intellead-fitscore:5000
@@ -114,11 +106,15 @@ services:
      - INTELLEAD_DATA_MONGODB_PORT=27017
      - INTELLEAD_CLASSIFICATION_POSTGRESQL_HOST=intellead-classification-postgresql
      - INTELLEAD_CLASSIFICATION_POSTGRESQL_PORT=5432
+     - INTELLEAD_CONNECTOR_MONGODB_HOST=intellead-connector-mongodb
+     - INTELLEAD_CONNECTOR_MONGODB_PORT=27017
 
 networks:
   web:
     driver: bridge
   postgres:
     driver: bridge
-  mongo:
+  mongo_data:
+    driver: bridge
+  mongo_connector:
     driver: bridge
