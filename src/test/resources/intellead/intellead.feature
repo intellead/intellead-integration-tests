@@ -1,17 +1,17 @@
 Feature: intellead
 
 
-  Scenario: request with empty body
+  Scenario: request with empty body to intellead-data/rd-webhook
     Given intellead-data is up
     When I send an empty body to intellead-data/rd-webhook
     Then I should receive a status code of 412
 
-  Scenario: request with no leads
+  Scenario: request with no leads to intellead-data/rd-webhook
     Given intellead-data is up
     When I send a body with no leads to intellead-data/rd-webhook
     Then I should receive a status code of 412
 
-  Scenario: send a lead and make sure it was inserted
+  Scenario: send a lead to intellead-data/rd-webhook and make sure it passes through all services and saves the classification
     Given intellead-data is up
     And intellead-enrich is up
     And receitaws-data is up
@@ -21,5 +21,8 @@ Feature: intellead
     And intellead-classification-postgresql database is up
     When I send lead with id 1000 to intellead-data/rd-webhook
     Then I should receive a status code of 200
-    And Lead with id 1000 should be in intellead-data-mongodb database
-    And Delete lead with id 1000 in intellead-data-mongodb database
+    And Lead with id 1000 should be in the database
+    And I should wait for 5000 ms
+    And Lead with lead.company_name equals to ELITIM CONSTRUCAO E INCORPORACAO LTDA should be in the database
+    And Lead with id 1000 has field lead.lead_status in the database
+    And Delete lead with id 1000 in the database
