@@ -2,7 +2,8 @@ FROM node:8.6.0-alpine
 
 WORKDIR /usr/src/intellead
 
-RUN apk add install git && \
+RUN apk update && \
+    apk add install git && \
     git clone https://github.com/intellead/receitaws-data.git
 
 WORKDIR /usr/src/intellead/receitaws-data
