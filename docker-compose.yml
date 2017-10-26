@@ -34,7 +34,7 @@ services:
   intellead-enrich:
     build:
       context: ./docker
-      dockerfile: docker/Dockerfile-intellead-enrich
+      dockerfile: Dockerfile-intellead-enrich
     ports:
      - "3004:3000"
     networks:
@@ -43,7 +43,7 @@ services:
   receitaws-data:
     build:
       context: ./docker
-      dockerfile: docker/Dockerfile-receitaws-data
+      dockerfile: Dockerfile-receitaws-data
     ports:
      - "3005:3000"
     networks:
@@ -52,7 +52,7 @@ services:
   qcnpj-crawler:
     build:
       context: ./docker
-      dockerfile: docker/Dockerfile-qcnpj-crawler
+      dockerfile: Dockerfile-qcnpj-crawler
     ports:
      - "3006:3000"
     networks:
@@ -61,7 +61,7 @@ services:
   intellead-classification:
     build:
       context: ./docker
-      dockerfile: docker/Dockerfile-intellead-classification
+      dockerfile: Dockerfile-intellead-classification
     ports:
      - "3007:5000"
     networks:
@@ -71,7 +71,7 @@ services:
   intellead-data-mongodb:
     build:
       context: ./docker
-      dockerfile: docker/Dockerfile-intellead-data-mongodb
+      dockerfile: Dockerfile-intellead-data-mongodb
     ports:
      - "4001:27017"
     networks:
@@ -80,7 +80,7 @@ services:
   intellead-classification-postgresql:
     build:
       context: ./docker
-      dockerfile: docker/Dockerfile-intellead-classification-postgresql
+      dockerfile: Dockerfile-intellead-classification-postgresql
     ports:
      - "4002:5432"
     networks:
