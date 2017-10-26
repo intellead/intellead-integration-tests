@@ -92,6 +92,16 @@ services:
      - web
      - postgres
      - mongo
+    depends_on:
+     - intellead-connector
+     - intellead-fitscore
+     - intellead-data
+     - intellead-enrich
+     - receitaws-data
+     - qcnpj-crawler
+     - intellead-classification
+     - intellead-data-mongodb
+     - intellead-classification-postgresql
 
 networks:
   web:
