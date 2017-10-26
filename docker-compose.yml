@@ -102,6 +102,18 @@ services:
      - intellead-classification
      - intellead-data-mongodb
      - intellead-classification-postgresql
+    environment:
+     - INTELLEAD_CONNECTOR_URL=intellead-connector:3000
+     - INTELLEAD_FITSCORE_URL=intellead-fitscore:5000
+     - INTELLEAD_DATA_URL=intellead-data:3000
+     - INTELLEAD_ENRICH_URL=intellead-enrich:3000
+     - RECEITAWS_DATA_URL=receitaws-data:3000
+     - QCNPJ_CRAWLER_URL=qcnpj-crawler:3000
+     - INTELLEAD_CLASSIFICATION_URL=intellead-classification:5000
+     - INTELLEAD_DATA_MONGODB_HOST=intellead-data-mongodb
+     - INTELLEAD_DATA_MONGODB_PORT=27017
+     - INTELLEAD_CLASSIFICATION_POSTGRESQL_HOST=intellead-classification-postgresql
+     - INTELLEAD_CLASSIFICATION_POSTGRESQL_PORT=5432
 
 networks:
   web:

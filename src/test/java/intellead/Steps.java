@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import static java.lang.Class.forName;
+import static java.lang.Integer.valueOf;
 import static java.lang.String.format;
 import static java.lang.Thread.sleep;
 import static java.sql.DriverManager.getConnection;
@@ -36,14 +37,14 @@ public class Steps {
     @Before
     public void setUp() throws ClassNotFoundException {
         serviceMapping = new HashMap<String, String>();
-        serviceMapping.put("intellead-connector", "http://localhost:3001");
-        serviceMapping.put("intellead-fitscore", "http://localhost:3002");
-        serviceMapping.put("intellead-data", "http://localhost:3003");
-        serviceMapping.put("intellead-enrich", "http://localhost:3004");
-        serviceMapping.put("receitaws-data", "http://localhost:3005");
-        serviceMapping.put("qcnpj-crawler", "http://localhost:3006");
-        serviceMapping.put("intellead-classification", "http://localhost:3007");
-        mongoClient = new MongoClient("localhost", 4001);
+        serviceMapping.put("intellead-connector", format("http://%s", getEnv("INTELLEAD_CONNECTOR_URL", "localhost:3001")));
+        serviceMapping.put("intellead-fitscore", format("http://%s", getEnv("INTELLEAD_FITSCORE_URL", "localhost:3002")));
+        serviceMapping.put("intellead-data", format("http://%s", getEnv("INTELLEAD_DATA_URL", "localhost:3003")));
+        serviceMapping.put("intellead-enrich", format("http://%s", getEnv("INTELLEAD_ENRICH_URL", "localhost:3004")));
+        serviceMapping.put("receitaws-data", format("http://%s", getEnv("RECEITAWS_DATA_URL", "localhost:3005")));
+        serviceMapping.put("qcnpj-crawler", format("http://%s", getEnv("QCNPJ_CRAWLER_URL", "localhost:3006")));
+        serviceMapping.put("intellead-classification", format("http://%s", getEnv("INTELLEAD_CLASSIFICATION_URL", "localhost:3007")));
+        mongoClient = new MongoClient(getEnv("INTELLEAD_DATA_MONGODB_HOST", "localhost"), valueOf(getEnv("INTELLEAD_DATA_MONGODB_PORT", "4001")));
         forName("org.postgresql.Driver");
         postgresOptions = new Properties();
         postgresOptions.setProperty("user","postgres");
@@ -58,20 +59,20 @@ public class Steps {
             request.get("/").getStatusCode();
             System.err.println(format("%s : reached after %s ms", serviceName, System.currentTimeMillis() - now));
         } catch (Exception e) {
-            fail(serviceName + " is unreachable");
+            fail(format("%s is unreachable %s", serviceName, serviceMapping.get(serviceName)));
         }
     }
 
     @Given("^intellead-data-mongodb database is up$")
     public void mongo_is_up() {
-        RestAssured.baseURI = "http://localhost:4001";
+        RestAssured.baseURI = format("http://%s:%s", getEnv("INTELLEAD_DATA_MONGODB_HOST", "localhost"), getEnv("INTELLEAD_DATA_MONGODB_PORT", "4001"));
         RequestSpecification httpRequest = RestAssured.given();
         httpRequest.get();
     }
 
     @Given("^intellead-classification-postgresql database is up$")
     public void postgres_is_up() throws SQLException {
-        getConnection("jdbc:postgresql://localhost:4002/postgres", postgresOptions);
+        getConnection(format("jdbc:postgresql://%s:%s/postgres", getEnv("INTELLEAD_CLASSIFICATION_POSTGRESQL_HOST", "localhost"), getEnv("INTELLEAD_CLASSIFICATION_POSTGRESQL_PORT", "4002")), postgresOptions);
     }
 
     @When("^I send an empty body to ([\\w-]+)(/[\\w-]+)$")
@@ -150,6 +151,11 @@ public class Steps {
         RestAssured.baseURI = serviceMapping.get(serviceName);
         RequestSpecification httpRequest = RestAssured.given();
         return httpRequest;
+    }
+    
+    private String getEnv(String key, String def) {
+        String env = System.getenv(key);
+        return env == null ? def : env;
     }
 
 }
