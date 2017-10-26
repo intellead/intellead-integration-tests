@@ -2,7 +2,7 @@ FROM node:8.6.0-alpine
 
 WORKDIR /usr/src/intellead
 
-RUN apt-get install git && \
+RUN apk add install git && \
     git clone https://github.com/intellead/intellead-connector.git
 
 WORKDIR /usr/src/intellead/intellead-connector
