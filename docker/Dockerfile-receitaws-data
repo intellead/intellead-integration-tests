@@ -4,7 +4,7 @@ WORKDIR /usr/src/intellead
 
 RUN apk update && \
     apk add git && \
-    git clone https://github.com/intellead/receitaws-data.git
+    git clone https://github.com/softplan/receitaws-data.git
 
 WORKDIR /usr/src/intellead/receitaws-data
 

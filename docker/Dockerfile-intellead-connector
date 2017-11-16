@@ -4,7 +4,7 @@ WORKDIR /usr/src/intellead
 
 RUN apk update && \
     apk add git && \
-    git clone https://github.com/intellead/intellead-connector.git
+    git clone https://github.com/softplan/intellead-connector.git
 
 WORKDIR /usr/src/intellead/intellead-connector
 

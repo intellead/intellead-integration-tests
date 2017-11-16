@@ -4,7 +4,7 @@ WORKDIR /usr/src/intellead
 
 RUN apk update && \
     apk add git && \
-    git clone https://github.com/intellead/intellead-data.git
+    git clone https://github.com/softplan/intellead-data.git
 
 WORKDIR /usr/src/intellead/intellead-data
 
