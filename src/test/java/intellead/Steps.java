@@ -21,7 +21,6 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import cucumber.annotation.Before;
-import cucumber.annotation.en.Given;
 import cucumber.annotation.en.Then;
 import cucumber.annotation.en.When;
 import io.restassured.RestAssured;
@@ -30,7 +29,6 @@ import io.restassured.specification.RequestSpecification;
 import org.bson.Document;
 import org.json.JSONObject;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -39,10 +37,9 @@ import static java.lang.Class.forName;
 import static java.lang.Integer.valueOf;
 import static java.lang.String.format;
 import static java.lang.Thread.sleep;
-import static java.sql.DriverManager.getConnection;
 import static org.bson.Document.parse;
-import static org.junit.Assert.*;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Steps {
 
@@ -67,38 +64,6 @@ public class Steps {
         forName("org.postgresql.Driver");
         postgresOptions = new Properties();
         postgresOptions.setProperty("user","postgres");
-    }
-
-    @Given("^([\\w-]+) is up$")
-    public void service_is_up(String serviceName) {
-        try {
-            long now = System.currentTimeMillis();
-            System.err.println(format("%s : trying to reach at %s", serviceName, serviceMapping.get(serviceName)));
-            RequestSpecification request = request(serviceName).header("Content-Type", "application/json");
-            request.get("/").getStatusCode();
-            System.err.println(format("%s : reached after %s ms", serviceName, System.currentTimeMillis() - now));
-        } catch (Exception e) {
-            fail(format("%s is unreachable %s", serviceName, serviceMapping.get(serviceName)));
-        }
-    }
-
-    @Given("^intellead-data-mongodb database is up$")
-    public void mongo_is_up() {
-        RestAssured.baseURI = format("http://%s:%s", getEnv("INTELLEAD_DATA_MONGODB_HOST", "localhost"), getEnv("INTELLEAD_DATA_MONGODB_PORT", "4001"));
-        RequestSpecification httpRequest = RestAssured.given();
-        httpRequest.get();
-    }
-
-    @Given("^intellead-classification-postgresql database is up$")
-    public void postgres_is_up() throws SQLException {
-        getConnection(format("jdbc:postgresql://%s:%s/postgres", getEnv("INTELLEAD_CLASSIFICATION_POSTGRESQL_HOST", "localhost"), getEnv("INTELLEAD_CLASSIFICATION_POSTGRESQL_PORT", "4002")), postgresOptions);
-    }
-
-    @Given("^intellead-connector-mongodb database is up$")
-    public void mongo_connector_is_up() {
-        RestAssured.baseURI = format("http://%s:%s", getEnv("INTELLEAD_CONNECTOR_MONGODB_HOST", "localhost"), getEnv("INTELLEAD_CONNECTOR_MONGODB_PORT", "4003"));
-        RequestSpecification httpRequest = RestAssured.given();
-        httpRequest.get();
     }
 
     @When("^I send an empty body to ([\\w-]+)(/[\\w-]+)$")
@@ -126,10 +91,11 @@ public class Steps {
         statusCode = response.getStatusCode();
     }
 
-    @When("^I send lead with id (\\d+) to ([\\w-]+)(/[\\w-]+)$")
+    @When("^I send lead with id (\\d+) to ([\\w-]+)(/[\\w-/]+)$")
     public void I_send_lead_with_id_to_service_api(int leadId, String serviceName, String api) {
         RequestSpecification request = request(serviceName);
         request.header("Content-Type", "application/json");
+        request.header("token", "ZVtrRXcpTnYWpsjnIpS3olQFGek84E5Z");
         request.body(Leads.getLead(leadId).toString());
         Response response = request.post(api);
         statusCode = response.getStatusCode();
