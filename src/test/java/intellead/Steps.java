@@ -70,6 +70,7 @@ public class Steps {
     public void I_send_an_empty_body_to_service_api(String serviceName, String api) {
         RequestSpecification request = request(serviceName);
         request.header("Content-Type", "application/json");
+        request.header("token", "ZVtrRXcpTnYWpsjnIpS3olQFGek84E5Z");
         request.body(new byte[0]);
         Response response = request.post(api);
         statusCode = response.getStatusCode();
@@ -84,6 +85,7 @@ public class Steps {
     public void I_send_a_body_with_no_leads_to_service_api(String serviceName, String api) {
         RequestSpecification request = request(serviceName);
         request.header("Content-Type", "application/json");
+        request.header("token", "ZVtrRXcpTnYWpsjnIpS3olQFGek84E5Z");
         JSONObject json = new JSONObject();
         json.put("leads", "");
         request.body(json.toString());
