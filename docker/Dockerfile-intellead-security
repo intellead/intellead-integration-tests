@@ -8,7 +8,7 @@ RUN apk update && \
 
 WORKDIR /usr/src/intellead/intellead-security
 
-RUN rm application.yml && \
+RUN rm src/main/resources/application.yml && \
     mv src/main/resources/application-docker.yml application.yml
 
 RUN mvn clean compile package
