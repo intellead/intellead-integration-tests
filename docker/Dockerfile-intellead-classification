@@ -3,7 +3,7 @@ FROM python:3.6.2
 WORKDIR /usr/src/intellead
 
 RUN apt-get install git && \
-    git clone https://github.com/softplan/intellead-classification.git
+    git clone https://github.com/intellead/intellead-classification.git
 
 WORKDIR /usr/src/intellead/intellead-classification
 
