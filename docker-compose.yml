@@ -9,7 +9,14 @@ services:
     networks:
       - web
       - mongo_data
-      - mongo_connector
+
+  intellead-security:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile-intellead-security
+    networks:
+      - web
+      - postgres_security
 
   intellead-data:
     build:
@@ -48,14 +55,6 @@ services:
       - web
       - postgres_classification
 
-  intellead-security:
-    build:
-      context: ./docker
-      dockerfile: Dockerfile-intellead-security
-    networks:
-      - web
-      - postgres_security
-
   intellead-data-mongodb:
     build:
       context: ./docker
@@ -91,7 +90,6 @@ services:
       - postgres_classification
       - postgres_security
       - mongo_data
-      - mongo_connector
     depends_on:
       - intellead-connector
       - intellead-data
@@ -102,7 +100,6 @@ services:
       - intellead-security
       - intellead-data-mongodb
       - intellead-classification-postgresql
-      - intellead-connector-mongodb
       - intellead-security-postgresql
     environment:
       - INTELLEAD_CONNECTOR_URL=intellead-connector:3000
@@ -115,8 +112,6 @@ services:
       - INTELLEAD_DATA_MONGODB_PORT=27017
       - INTELLEAD_CLASSIFICATION_POSTGRESQL_HOST=intellead-classification-postgresql
       - INTELLEAD_CLASSIFICATION_POSTGRESQL_PORT=5432
-      - INTELLEAD_CONNECTOR_MONGODB_HOST=intellead-connector-mongodb
-      - INTELLEAD_CONNECTOR_MONGODB_PORT=27017
 
 networks:
   web:
@@ -124,8 +119,6 @@ networks:
   postgres_classification:
     driver: bridge
   mongo_data:
-    driver: bridge
-  mongo_connector:
     driver: bridge
   postgres_security:
     driver: bridge

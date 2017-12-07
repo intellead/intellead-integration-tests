@@ -45,7 +45,6 @@ public class Steps {
 
     protected Map<String, String> serviceMapping;
     protected MongoClient mongoClientData;
-    protected MongoClient mongoClientConnector;
     protected Properties postgresOptions;
     private int statusCode;
 
@@ -53,14 +52,12 @@ public class Steps {
     public void setUp() throws ClassNotFoundException {
         serviceMapping = new HashMap<String, String>();
         serviceMapping.put("intellead-connector", format("http://%s", getEnv("INTELLEAD_CONNECTOR_URL", "localhost:3001")));
-        serviceMapping.put("intellead-fitscore", format("http://%s", getEnv("INTELLEAD_FITSCORE_URL", "localhost:3002")));
         serviceMapping.put("intellead-data", format("http://%s", getEnv("INTELLEAD_DATA_URL", "localhost:3003")));
         serviceMapping.put("intellead-enrich", format("http://%s", getEnv("INTELLEAD_ENRICH_URL", "localhost:3004")));
         serviceMapping.put("receitaws-data", format("http://%s", getEnv("RECEITAWS_DATA_URL", "localhost:3005")));
         serviceMapping.put("qcnpj-crawler", format("http://%s", getEnv("QCNPJ_CRAWLER_URL", "localhost:3006")));
         serviceMapping.put("intellead-classification", format("http://%s", getEnv("INTELLEAD_CLASSIFICATION_URL", "localhost:3007")));
-        mongoClientData = new MongoClient(getEnv("INTELLEAD_DATA_MONGODB_HOST", "localhost"), valueOf(getEnv("INTELLEAD_DATA_MONGODB_PORT", "4001")));
-        mongoClientConnector = new MongoClient(getEnv("INTELLEAD_CONNECTOR_MONGODB_HOST", "localhost"), valueOf(getEnv("INTELLEAD_CONNECTOR_MONGODB_PORT", "4003")));
+        mongoClientData = new MongoClient(getEnv("INTELLEAD_DATA_MONGODB_HOST", "localhost"), valueOf(getEnv("INTELLEAD_DATA_MONGODB_PORT", "4002")));
         forName("org.postgresql.Driver");
         postgresOptions = new Properties();
         postgresOptions.setProperty("user","postgres");
@@ -137,14 +134,6 @@ public class Steps {
         MongoDatabase database = mongoClientData.getDatabase("local");
         MongoCollection<Document> collection = database.getCollection("leads");
         collection.deleteOne(parse("{_id: {$eq: \"" + leadId + "\"}}"));
-        long count = collection.count(parse("{_id: {$eq: \"" + leadId + "\"}}"));
-        assertEquals(0, count);
-    }
-
-    @Then("^Lead with id (\\d+) should not be in connector database")
-    public void Lead_with_id_should_be_in_intellead_connector_mongodb_database(int leadId) {
-        MongoDatabase database = mongoClientConnector.getDatabase("local");
-        MongoCollection<Document> collection = database.getCollection("leads");
         long count = collection.count(parse("{_id: {$eq: \"" + leadId + "\"}}"));
         assertEquals(0, count);
     }
