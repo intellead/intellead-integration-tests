@@ -28,8 +28,6 @@ Feature: intellead
     And Lead with lead.company_name equals to ELITIM CONSTRUCAO E INCORPORACAO LTDA should be in the database
     And Lead with id 2000 has field lead.lead_status in the database
     And Delete lead with id 2000 in the database
-    And I should wait for 2000 ms
-    And Lead with id 2000 should not be in connector database
 
   Scenario: send a lead without auth token to intellead-connector
     When I send lead with id 2000 to intellead-connector/rd-webhook/
