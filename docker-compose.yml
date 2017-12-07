@@ -55,6 +55,13 @@ services:
       - web
       - postgres_classification
 
+  intellead-security-postgresql:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile-intellead-security-postgresql
+    networks:
+      - postgres_security
+
   intellead-data-mongodb:
     build:
       context: ./docker
@@ -68,20 +75,6 @@ services:
       dockerfile: Dockerfile-intellead-classification-postgresql
     networks:
       - postgres_classification
-
-  intellead-connector-mongodb:
-    build:
-      context: ./docker
-      dockerfile: Dockerfile-intellead-connector-mongodb
-    networks:
-      - mongo_connector
-
-  intellead-security-postgresql:
-    build:
-      context: ./docker
-      dockerfile: Dockerfile-intellead-security-postgresql
-    networks:
-      - postgres_security
 
   intellead-integration-tests:
     build: .
