@@ -4,6 +4,8 @@ WORKDIR /usr/src/intellead/intellead-integration-test/test
 
 COPY pom.xml ./
 
+RUN mvn verify clean --fail-never
+
 COPY src/test/java/intellead ./src/test/java/intellead
 
 COPY src/test/resources/intellead ./src/test/resources/intellead
