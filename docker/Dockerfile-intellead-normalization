@@ -1,0 +1,15 @@
+FROM node:8.6.0-alpine
+
+WORKDIR /usr/src/intellead
+
+RUN apk update && \
+    apk add git && \
+    git clone https://github.com/intellead/intellead-normalization.git
+
+WORKDIR /usr/src/intellead/intellead-normalization
+
+RUN npm install --silent --progress=false --production
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
