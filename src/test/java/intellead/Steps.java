@@ -57,6 +57,7 @@ public class Steps {
         serviceMapping.put("receitaws-data", format("http://%s", getEnv("RECEITAWS_DATA_URL", "localhost:3005")));
         serviceMapping.put("qcnpj-crawler", format("http://%s", getEnv("QCNPJ_CRAWLER_URL", "localhost:3006")));
         serviceMapping.put("intellead-classification", format("http://%s", getEnv("INTELLEAD_CLASSIFICATION_URL", "localhost:3007")));
+        serviceMapping.put("intellead-normalization", format("http://%s", getEnv("INTELLEAD_NORMALIZATION", "localhost:3008")));
         mongoClientData = new MongoClient(getEnv("INTELLEAD_DATA_MONGODB_HOST", "localhost"), valueOf(getEnv("INTELLEAD_DATA_MONGODB_PORT", "4002")));
         forName("org.postgresql.Driver");
         postgresOptions = new Properties();

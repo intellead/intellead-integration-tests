@@ -55,6 +55,13 @@ services:
       - web
       - postgres_classification
 
+  intellead-normalization:
+      build:
+        context: ./docker
+        dockerfile: Dockerfile-intellead-normalization
+      networks:
+        - web
+
   intellead-security-postgresql:
     build:
       context: ./docker
