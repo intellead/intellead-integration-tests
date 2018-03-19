@@ -56,11 +56,12 @@ services:
       - postgres_classification
 
   intellead-normalization:
-      build:
-        context: ./docker
-        dockerfile: Dockerfile-intellead-normalization
-      networks:
-        - web
+    build:
+      context: ./docker
+      dockerfile: Dockerfile-intellead-normalization
+    networks:
+      - web
+      - postgres_normalization
 
   intellead-security-postgresql:
     build:
@@ -83,11 +84,19 @@ services:
     networks:
       - postgres_classification
 
+  intellead-normalization-postgresql:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile-intellead-normalization-postgresql
+    networks:
+      - postgres_normalization
+
   intellead-integration-tests:
     build: .
     networks:
       - web
       - postgres_classification
+      - postgres_normalization
       - postgres_security
       - mongo_data
     depends_on:
@@ -97,9 +106,11 @@ services:
       - receitaws-data
       - qcnpj-crawler
       - intellead-classification
+      - intellead-normalization
       - intellead-security
       - intellead-data-mongodb
       - intellead-classification-postgresql
+      - intellead-normalization-postgresql
       - intellead-security-postgresql
     environment:
       - INTELLEAD_CONNECTOR_URL=intellead-connector:3000
@@ -121,4 +132,6 @@ networks:
   mongo_data:
     driver: bridge
   postgres_security:
+    driver: bridge
+  postgres_normalization:
     driver: bridge
