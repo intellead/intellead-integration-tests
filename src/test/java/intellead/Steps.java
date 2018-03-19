@@ -17,7 +17,6 @@
 */
 package intellead;
 
-import com.mongodb.Block;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -119,12 +118,6 @@ public class Steps {
     public void Lead_with_field_should_be_in_intellead_data_mongodb_database(String fieldName, String fieldValue) {
         MongoDatabase database = mongoClientData.getDatabase("local");
         MongoCollection<Document> collection = database.getCollection("leads");
-        collection.find().forEach(new Block<Document>() {
-            public void apply(Document document) {
-                Document lead = (Document) document.get("lead");
-                System.out.println(lead.get("last_conversion"));
-            }
-        });
         long count = collection.count(parse("{\"" + fieldName + "\": {$eq: \"" + fieldValue + "\"}}"));
         assertTrue(count >= 1);
     }
