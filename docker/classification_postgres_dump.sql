@@ -1,12 +1,3 @@
---
--- PostgreSQL database dump
---
-
--- Dumped from database version 9.6.3
--- Dumped by pg_dump version 9.6.3
-
--- Started on 2017-09-27 17:09:13 -03
-
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
@@ -15,17 +6,9 @@ SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET row_security = off;
-
 SET search_path = public, pg_catalog;
-
 SET default_tablespace = '';
-
 SET default_with_oids = false;
-
---
--- TOC entry 185 (class 1259 OID 16386)
--- Name: dataset; Type: TABLE; Schema: public; Owner: postgres
---
 
 CREATE TABLE dataset (
     company character varying(255),
@@ -46,14 +29,7 @@ CREATE TABLE dataset (
     cnae integer
 );
 
-
 ALTER TABLE dataset OWNER TO postgres;
-
---
--- TOC entry 2388 (class 0 OID 16386)
--- Dependencies: 185
--- Data for Name: dataset; Type: TABLE DATA; Schema: public; Owner: postgres
---
 
 COPY dataset (company, email, name, job_title, lead_profile, conversions, area, number_employees, segment, work_in_progress, source_first_conversion, source_last_conversion, concern, looking_for_management_software, lead_status, cnae) FROM stdin;
 Nome da Empresa	n1@email.do.lead	Nome do Lead	0	3	4	0	0	1	0	0	2	0	9	0	0
@@ -653,19 +629,5 @@ Nome da Empresa	n594@email.do.lead	Nome do Lead	1	4	1	0	0	0	0	5	5	0	9	1	25
 Nome da Empresa	n595@email.do.lead	Nome do Lead	2	4	1	0	0	0	0	5	5	0	9	1	0
 \.
 
-
---
--- TOC entry 2270 (class 2606 OID 16395)
--- Name: dataset dataset_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
 ALTER TABLE ONLY dataset
     ADD CONSTRAINT dataset_pkey PRIMARY KEY (email);
-
-
--- Completed on 2017-09-27 17:09:14 -03
-
---
--- PostgreSQL database dump complete
---
-
