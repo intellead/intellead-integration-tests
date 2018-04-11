@@ -91,6 +91,16 @@ public class Steps {
         statusCode = response.getStatusCode();
     }
 
+    @When("^I send lead with id (\\d+) to ([\\w-]+)(/[\\w-/]+) with token ([\\w-]+)$")
+    public void I_send_lead_with_id_to_service_api(int leadId, String serviceName, String api, String token) {
+        RequestSpecification request = request(serviceName);
+        request.header("Content-Type", "application/json");
+        request.header("token", token);
+        request.body(Leads.getLead(leadId).toString());
+        Response response = request.post(api);
+        statusCode = response.getStatusCode();
+    }
+
     @When("^I send lead with id (\\d+) to ([\\w-]+)(/[\\w-/]+)$")
     public void I_send_lead_with_id_to_service_api(int leadId, String serviceName, String api) {
         RequestSpecification request = request(serviceName);

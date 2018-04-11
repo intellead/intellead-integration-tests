@@ -20,6 +20,7 @@ ALTER TABLE customer OWNER TO postgres;
 
 COPY customer (id, name, token) FROM stdin;
 1	intellead-customer	ZVtrRXcpTnYWpsjnIpS3olQFGek84E5Z
+2	intellead-customer-2	TR2e6X6ctyJyyBytBabP4JZXxmo2HAv9
 \.
 
 ALTER TABLE ONLY customer

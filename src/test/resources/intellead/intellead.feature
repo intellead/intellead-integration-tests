@@ -10,7 +10,7 @@ Feature: intellead
     Then I should receive a status code of 412
 
   Scenario: send a lead to intellead-data/rd-webhook and make sure it passes through all services and saves the classification
-    When I send lead with id 1000 to intellead-data/rd-webhook
+    When I send lead with id 1000 to intellead-data/rd-webhook with token ZVtrRXcpTnYWpsjnIpS3olQFGek84E5Z
     Then I should receive a status code of 200
     And I should wait for 2000 ms
     And Lead with id 1000 should be in the database
@@ -30,9 +30,9 @@ Feature: intellead
     And Delete lead with id 2000 in the database
 
   Scenario: send a lead without auth token to intellead-connector
-    When I send lead with id 2000 to intellead-connector/rd-webhook/
+    When I send lead with id 2000 to intellead-connector/rd-webhook/ with token ZVtrRXcpTnYWpsjnIpS3olQFGek84E5Z
     Then I should receive a status code of 404
 
   Scenario: send a lead with an unauthorized token to intellead-connector
-    When I send lead with id 2000 to intellead-connector/rd-webhook/invalidToken
+    When I send lead with id 2000 to intellead-connector/rd-webhook/invalidToken with token ZVtrRXcpTnYWpsjnIpS3olQFGek84E5Z
     Then I should receive a status code of 403
