@@ -31,7 +31,7 @@ Feature: intellead
 
   Scenario: send a lead without auth token to intellead-connector
     When I send lead with id 2000 to intellead-connector/rd-webhook/
-    Then I should receive a status code of 401
+    Then I should receive a status code of 404
 
   Scenario: send a lead with an unauthorized token to intellead-connector
     When I send lead with id 2000 to intellead-connector/rd-webhook/invalidToken
