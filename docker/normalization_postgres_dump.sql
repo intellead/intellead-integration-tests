@@ -203,6 +203,18 @@ COPY fields (id, customer, name, path, "createdAt", "updatedAt", type, default_n
 10	1	concern	lead.custom_fields.Qual sua maior preocupação hoje?	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	0
 11	1	looking_for_a_software	lead.last_conversion.content.Estou a procura de um software de gestão para minha empresa!	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	9
 12	1	main_activity	lead.main_activity_code	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	0
+13	2	role	lead.job_title	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
+14	2	profile	lead.fit_score	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
+15	2	conversion	lead.number_conversions	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
+16	2	lead_area	lead.custom_fields.Área	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
+17	2	number_of_employees	lead.custom_fields.Quantos funcionários há na sua empresa nas áreas de Engenharia, Compras, Financeiro, Administrativo e Comercial?	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
+18	2	company_segment	lead.custom_fields.Segmento	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
+19	2	wip	lead.custom_fields.Sua empresa tem obras em andamento?	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
+20	2	source_first_conv	lead.first_conversion.conversion_origin.source	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
+21	2	source_last_conv	lead.last_conversion.conversion_origin.source	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
+22	2	concern	lead.custom_fields.Qual sua maior preocupação hoje?	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
+23	2	looking_for_a_software	lead.last_conversion.content.Estou a procura de um software de gestão para minha empresa!	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
+24	2	main_activity	lead.main_activity_code	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
 \.
 
 ALTER TABLE ONLY fieldconfigs
