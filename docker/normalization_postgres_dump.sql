@@ -10,18 +10,6 @@ SET search_path = public, pg_catalog;
 SET default_tablespace = '';
 SET default_with_oids = false;
 
-CREATE TABLE fieldconfigs (
-    id integer NOT NULL,
-    field_id integer,
-    value character varying(255),
-    number_value integer,
-    "createdAt" timestamp with time zone NOT NULL,
-    "updatedAt" timestamp with time zone NOT NULL,
-    value_operator character varying(11)
-);
-
-ALTER TABLE fieldconfigs OWNER TO postgres;
-
 CREATE TABLE fields (
     id integer NOT NULL,
     customer integer,
@@ -34,6 +22,46 @@ CREATE TABLE fields (
 );
 
 ALTER TABLE fields OWNER TO postgres;
+
+CREATE TABLE fieldconfigs (
+    id integer NOT NULL,
+    field_id integer,
+    value character varying(255),
+    number_value integer,
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL,
+    value_operator character varying(11)
+);
+
+ALTER TABLE fieldconfigs OWNER TO postgres;
+
+COPY fields (id, customer, name, path, "createdAt", "updatedAt", type, default_number_value) FROM stdin;
+1	1	role	lead.job_title	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	0
+2	1	profile	lead.fit_score	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	0
+3	1	conversion	lead.number_conversions	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	raw	0
+4	1	lead_area	lead.custom_fields.Área	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	0
+5	1	number_of_employees	lead.custom_fields.Quantos funcionários há na sua empresa nas áreas de Engenharia, Compras, Financeiro, Administrativo e Comercial?	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	0
+6	1	company_segment	lead.custom_fields.Segmento	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	0
+7	1	wip	lead.custom_fields.Sua empresa tem obras em andamento?	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	0
+8	1	source_first_conv	lead.first_conversion.conversion_origin.source	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	0
+9	1	source_last_conv	lead.last_conversion.conversion_origin.source	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	0
+10	1	concern	lead.custom_fields.Qual sua maior preocupação hoje?	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	0
+11	1	looking_for_a_software	lead.last_conversion.content.Estou a procura de um software de gestão para minha empresa!	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	9
+12	1	main_activity	lead.main_activity_code	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	0
+13	2	role	lead.job_title	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
+14	2	profile	lead.fit_score	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
+15	2	conversion	lead.number_conversions	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
+16	2	lead_area	lead.custom_fields.Área	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
+17	2	number_of_employees	lead.custom_fields.Quantos funcionários há na sua empresa nas áreas de Engenharia, Compras, Financeiro, Administrativo e Comercial?	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
+18	2	company_segment	lead.custom_fields.Segmento	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
+19	2	wip	lead.custom_fields.Sua empresa tem obras em andamento?	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
+20	2	source_first_conv	lead.first_conversion.conversion_origin.source	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
+21	2	source_last_conv	lead.last_conversion.conversion_origin.source	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
+22	2	concern	lead.custom_fields.Qual sua maior preocupação hoje?	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
+23	2	looking_for_a_software	lead.last_conversion.content.Estou a procura de um software de gestão para minha empresa!	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
+24	2	main_activity	lead.main_activity_code	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
+25	3	age	lead.age	2018-05-10 00:00:00-07	2018-05-10 00:00:00-07	raw	0
+\.
 
 COPY fieldconfigs (id, field_id, value, number_value, "createdAt", "updatedAt", value_operator) FROM stdin;
 1	1	Sócio/Proprietário	1	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	eq
@@ -190,35 +218,8 @@ COPY fieldconfigs (id, field_id, value, number_value, "createdAt", "updatedAt", 
 152	12	41.20-4-00	31	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	eq
 \.
 
-COPY fields (id, customer, name, path, "createdAt", "updatedAt", type, default_number_value) FROM stdin;
-1	1	role	lead.job_title	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	0
-2	1	profile	lead.fit_score	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	0
-3	1	conversion	lead.number_conversions	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	raw	0
-4	1	lead_area	lead.custom_fields.Área	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	0
-5	1	number_of_employees	lead.custom_fields.Quantos funcionários há na sua empresa nas áreas de Engenharia, Compras, Financeiro, Administrativo e Comercial?	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	0
-6	1	company_segment	lead.custom_fields.Segmento	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	0
-7	1	wip	lead.custom_fields.Sua empresa tem obras em andamento?	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	0
-8	1	source_first_conv	lead.first_conversion.conversion_origin.source	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	0
-9	1	source_last_conv	lead.last_conversion.conversion_origin.source	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	0
-10	1	concern	lead.custom_fields.Qual sua maior preocupação hoje?	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	0
-11	1	looking_for_a_software	lead.last_conversion.content.Estou a procura de um software de gestão para minha empresa!	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	9
-12	1	main_activity	lead.main_activity_code	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	0
-13	2	role	lead.job_title	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
-14	2	profile	lead.fit_score	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
-15	2	conversion	lead.number_conversions	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
-16	2	lead_area	lead.custom_fields.Área	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
-17	2	number_of_employees	lead.custom_fields.Quantos funcionários há na sua empresa nas áreas de Engenharia, Compras, Financeiro, Administrativo e Comercial?	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
-18	2	company_segment	lead.custom_fields.Segmento	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
-19	2	wip	lead.custom_fields.Sua empresa tem obras em andamento?	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
-20	2	source_first_conv	lead.first_conversion.conversion_origin.source	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
-21	2	source_last_conv	lead.last_conversion.conversion_origin.source	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
-22	2	concern	lead.custom_fields.Qual sua maior preocupação hoje?	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
-23	2	looking_for_a_software	lead.last_conversion.content.Estou a procura de um software de gestão para minha empresa!	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
-24	2	main_activity	lead.main_activity_code	2018-03-15 00:00:00-07	2018-03-15 00:00:00-07	config	1
-\.
+ALTER TABLE ONLY fields
+    ADD CONSTRAINT fields_pkey PRIMARY KEY (id);
 
 ALTER TABLE ONLY fieldconfigs
     ADD CONSTRAINT fieldconfigs_pkey PRIMARY KEY (id);
-
-ALTER TABLE ONLY fields
-    ADD CONSTRAINT fields_pkey PRIMARY KEY (id);

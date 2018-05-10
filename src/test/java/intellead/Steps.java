@@ -111,6 +111,16 @@ public class Steps {
         statusCode = response.getStatusCode();
     }
 
+    @When("^I send new dataset structure lead with id (\\d+) and age (\\d+) to ([\\w-]+)(/[\\w-/]+) with token ([\\w-]+)$")
+    public void I_send_new_dataset_structure_lead_with_id_and_age_to_intellead_connector_rd_webhook_with_token_NKNYi_qETGmzDzOfY_hmrhvxEJ_vSBz(int id, int age, String serviceName, String api, String token) {
+        RequestSpecification request = request(serviceName);
+        request.header("Content-Type", "application/json");
+        request.header("token", token);
+        request.body(Leads.getNewDatasetStructureLead(id, age).toString());
+        Response response = request.post(api);
+        statusCode = response.getStatusCode();
+    }
+
     @Then("^I should wait for (\\d+) ms$")
     public void I_should_wait_for_ms(int milliseconds) throws InterruptedException {
         sleep(milliseconds);

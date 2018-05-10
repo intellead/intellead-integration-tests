@@ -17,6 +17,7 @@
 */
 package intellead;
 
+import jdk.nashorn.internal.objects.NativeRegExp;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -185,4 +186,16 @@ public class Leads {
         return body;
     }
 
+    public static JSONObject getNewDatasetStructureLead(int id, int age) {
+        StringBuilder json = new StringBuilder();
+        json.append("{");
+        json.append("   \"id\": \"").append(id).append("\",");
+        json.append("   \"age\": \"").append(age).append("\"");
+        json.append("}");
+        JSONArray leads = new JSONArray();
+        leads.put(0, new JSONObject(json.toString()));
+        JSONObject body = new JSONObject();
+        body.put("leads", leads);
+        return body;
+    }
 }
