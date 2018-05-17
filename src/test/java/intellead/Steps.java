@@ -159,6 +159,14 @@ public class Steps {
         assertEquals(0, count);
     }
 
+    @Then("^Customer (\\d+) must have (\\d+) leads? in the database$")
+    public void Customer_must_have_lead_in_the_database(int customer, int leads) {
+        MongoDatabase database = mongoClientData.getDatabase("local");
+        MongoCollection<Document> collection = database.getCollection("leads");
+        long count = collection.count(parse("{\"lead.customer\": {$eq: " + customer + "}}"));
+        assertEquals(leads, count);
+    }
+
     private RequestSpecification request(String serviceName) {
         RestAssured.baseURI = serviceMapping.get(serviceName);
         RequestSpecification httpRequest = RestAssured.given();
