@@ -1,4 +1,4 @@
-Feature: new dataset structure
+Feature: a new dataset structure
 
 
   Scenario: send an unqualified lead to intellead-data/rd-webhook and make sure it passes through all services and saves the classification using a new dataset structure
